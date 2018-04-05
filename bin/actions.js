@@ -3,7 +3,7 @@ const sud = require('su-downloader2')
 const sudownloader = sud.suDownloader
 const bytes = require('bytes')
 const { convertSec } = require('./util')
-require('draftlog').into(console)
+require('draftlog').into(console).addLineListener(process.stdin)
 
 const cwd = process.cwd()
 
