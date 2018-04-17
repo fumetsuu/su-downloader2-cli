@@ -2,7 +2,7 @@ const path = require('path')
 const sud = require('su-downloader2')
 const sudownloader = sud.suDownloader
 const bytes = require('bytes')
-const { convertSec } = require('./util')
+const { convertSec, genProgressBar } = require('./util')
 require('draftlog').into(console).addLineListener(process.stdin)
 
 const cwd = process.cwd()
@@ -49,13 +49,14 @@ function addDownloadListeners(key, downloadInstance, draft) {
 			var percentage = (x.total.completed).toFixed(2)
 			var elapsed = convertSec(Math.round(x.present.time))
 			var eta = convertSec(Math.round(x.future.eta))
-			draft(`KEY: ${key} : DOWNLOADING | ${downloadInstance.options.path}  |  ${speed}  |  ${progressSize}/${totalSize}  |  ${percentage}%  |  elapsed: ${elapsed}  |  ETA: ${eta}s`)
+			draft(`KEY: ${key} : ${status} | ${path.basename(downloadInstance.options.path)}  | ${genProgressBar(percentage)} |  ${speed}  |  ${progressSize}/${totalSize}  |  ${percentage}%  |  elapsed: ${elapsed}  |  ETA: ${eta}s`)
 		})
 		.on('error', () => {
 			draft(`KEY: ${key} : ERROR`)
 		})
-		.on('finish', () => {
-			draft(`KEY: ${key} : COMPLETE  |  ${downloadInstance.options.path}`)
+		.on('finish', x => {
+			var totalSize = bytes(x.total.size)
+			draft(`KEY: ${key} : COMPLETE  |  ${downloadInstance.options.path} | ${totalSize}`)
 		})
 }
 

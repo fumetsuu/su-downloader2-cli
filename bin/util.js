@@ -12,6 +12,20 @@ function convertSec(sec) {
 			(s == 0 ? '' : `${s} sec `)
 }
 
+function genProgressBar(progress) {
+	var progressBar = ''
+	var percentageDec = progress / 100
+	var normalisedProgress = Math.floor(20 * percentageDec)
+	for(var i = 0; i < normalisedProgress; i++) {
+		progressBar += '█'
+	}
+	for(var j = 0; j < 20 - normalisedProgress; j++) {
+		progressBar += '='
+	}
+	return `[${progressBar}]`
+}
+
 module.exports = {
-	convertSec
+	convertSec,
+	genProgressBar
 }
